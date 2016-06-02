@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>D3</title>
+	<script type="text/javascript" src='d3/d3.min.js'></script>
+</head>
+<body>
+<h1>Hello</h1>
+<script type="text/javascript">
+	var dataset=[5,10,15,20,25];
+	// Finds the body in the DOM and hands off a reference to the next step in the chain.
+	d3.select('body')
+	// Selects all paragraphs in the DOM. if none exist yet, this returns an empty selection. 
+		.selectAll('p')
+		// Counts and parses our data values. There are five values in our array called dataset, so everything past this point is executed five times, once for each value.
+		.data(dataset)
+		// To create new, data-bound elements, you must use enter().
+		.enter()
+		.append('p')
+		.text('New paragraph!');
+
+		console.log(d3.selectAll('p'));
+		d3.select('body')
+			.selectAll('p')
+			.data(dataset)
+			.append('p')
+			// d is the value in dataset array
+			.text(function (d) {
+				// body...
+				return "number: "+ d ;
+			})
+			.style('color','red')
+			.style('font-size',function(d){
+				if(d>15){
+					return '32px';
+				}else{
+					return '20px';
+				}
+			});
+</script>
+</body>
+</html>
