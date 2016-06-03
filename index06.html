@@ -9,6 +9,8 @@
 <body>
 <div id="bar"></div>
 <div id="circle"></div>
+<div id="svg_bar"></div>
+
 <script type="text/javascript">
   var dataset=[];
   for (var i =0; i <25; i++) {
@@ -33,6 +35,45 @@ var circles = svg.selectAll('circle')
     .attr('r',function(d){
       return d;
     })
+    .attr('fill','yellow')
+    .attr('stroke','orange')
+    .attr('stroke-width',function(d){
+    return d/2;
+  });
+// bars with svg rect
+var w_bar = 500;
+var h_bar = 100;
+var svg_bar = d3.select('#svg_bar')
+                .append('svg')
+                .attr('width',w_bar)
+                .attr('height',h_bar);
+    svg_bar.selectAll('rect')
+          .data(dataset)
+          .enter()
+          .append('rect')
+          .attr({
+            x:function(d,i){return i*(w_bar / dataset.length);},
+            y:function(d){return h_bar-(d*4);},
+            width: w_bar/dataset.length-1,
+            height:function(d){return d * 4;},
+            fill:function(d){return 'rgb(0,0,'+(d*10)+')';}
+          });
+   //add labels on svg_bar
+   svg_bar.selectAll('text')
+      .data(dataset)
+      .enter()
+      .append('text')
+      .text(function(d){
+        return d;
+      })
+      .attr({
+        x:function(d,i){ return i * (w_bar / dataset.length)+(w_bar/dataset.length-1)/2;},
+        y:function(d){return h_bar-(d * 4)+14;},
+        "font-family":'sans-serif',
+        'font-size':'11px',
+        'fill':'white',
+        'text-anchor':'middle'
+      }) 
 // bars
   d3.select('#bar')
   .selectAll('div')
@@ -44,6 +85,7 @@ var circles = svg.selectAll('circle')
     // body...
     return 5*d+'px';
   });
+
 </script>
 
 </body>

@@ -2,7 +2,7 @@ div.bar {
   display: inline-block;
   width: 20px;
   height: 75px;
-  background-color: teal;
+  background-color: #055;
   margin-right: 2px;
 }
 *{
