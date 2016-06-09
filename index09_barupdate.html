@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Charpter 07 scaling the Scatterplot</title>
+  <script type="text/javascript" src='d3/d3.min.js'></script>
+
+</head>
+<body>
+<script type="text/javascript">
+var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+                11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+var w = 600;
+var h =250;
+d3.select('body')
+  .selectAll('div')
+  .data(dataset)
+  .enter()
+  .append('div')
+  .attr({
+    'fill':'blue',
+    "width":w/dataset.length,
+    'height':h/dataset.length
+  });
+
+
+</script>
+</body>
+</html>

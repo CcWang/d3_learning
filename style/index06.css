@@ -6,5 +6,20 @@ div.bar {
   margin-right: 2px;
 }
 *{
-  color:red;
+  background-color:lightblue;
+}
+/*. The axes themselves(axis) are made up of path, line, and text elements,*/
+.axis path,
+.axis line {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font-family: sans-serif;
+  font-size: 11px;
+}
+text {
+  fill:olive;
 }
