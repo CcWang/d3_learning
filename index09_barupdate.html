@@ -18,9 +18,21 @@ d3.select('body')
   .enter()
   .append('div')
   .attr({
-    'fill':'blue',
-    "width":w/dataset.length,
-    'height':h/dataset.length
+    'x':function(d,i){
+      return i;
+    }
+    })
+  .style('height',function (s) {
+    // body...
+    return s+'px';
+  })
+  .style('width',function(d){
+    return '20px';
+  })
+  .style({
+    'background-color':'blue',
+    'margin':'1px',
+    'display':'inline-block'
   });
 
 
