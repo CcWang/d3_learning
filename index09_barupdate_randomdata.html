@@ -7,7 +7,7 @@
 
 </head>
 <body>
-<p>Click on this text to update the chart with new data values(once)</p>
+<p>Click on this text to update the chart with new data values</p>
 <script type="text/javascript">
 var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
                 11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
@@ -66,7 +66,16 @@ svg.selectAll('text')
 
   d3.select('p')
   .on('click',function(){
-    dataset=[10,12,15,20,18,17,16,18,23,25,5,10,13,19,21,25,22,18,15,13];
+    var numValues = dataset.length;
+    dataset=[];
+    for(var i=0;i<numValues;i++){
+      var newNumber = Math.floor(Math.random()*100);
+      dataset.push(newNumber);
+    }
+    // since dataset value changes from 25 to 100, we need to recaculate the scale.
+    var yScale = d3.scale.linear()
+            .domain([0,d3.max(dataset)])
+            .range([0,h]);
     svg.selectAll('rect')
       .data(dataset)
       .transition()
