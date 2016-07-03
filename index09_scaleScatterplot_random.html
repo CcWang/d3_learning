@@ -5,28 +5,38 @@
 	<title>Scale Scatterplot Random</title>
 	 <script type="text/javascript" src='d3/d3.min.js'></script>
   <!-- <link rel="stylesheet" type="text/css" href="style/index06.css"> -->
+  <style type="text/css">
+  	.axis path,
+		.axis line {
+		  fill: none;
+		  stroke: black;
+		  shape-rendering: crispEdges;
+		}
+
+		.axis text {
+		  font-family: sans-serif;
+		  font-size: 11px;
+		  color: olive;
+		}
+  </style>
 </head>
 <body>
+<p>Click on this text to update the chart with new data values as many times as you like!</p>
+
 	<script type="text/javascript">
 		// set up your data
-		var dataset = [
-	                  [5, 20], 
-	                  [480, 90], 
-	                  [250, 50], 
-	                  [100, 33], 
-	                  [330, 95],
-	                  [410, 12], 
-	                  [475, 44], 
-	                  [25, 67], 
-	                  [85, 21], 
-	                  [220, 88],
-	                  [600,150]
-									];
+		var dataset = [	];
 
 
 		var w = 800;
-		var h =300;
+		var h =500;
 		var padding =30;
+		var maxRange = Math.random()*1000;
+		for(var i=0;i<50;i++){
+			var new1 = Math.floor(Math.random()*maxRange);
+			var new2 = Math.floor(Math.random()*maxRange);
+			dataset.push([new1,new2]);
+		}
 		// create svg
 		var svg = d3.select('body')
 								.append('svg')
@@ -70,8 +80,77 @@
 					// make the size of circles scaled
 					return rScale(d[1]);
 				})
-				.attr('fill','red');
+				.attr('fill','darkblue');
+		// svg.selectAll('text')
+		// 		.data(dataset)
+		// 		.enter()
+		// 		.append('text')
+		// 		.text(function(d){
+		// 			return d[0]+', '+d[1]
+		// 		})
+		// 		.attr({
+		// 			'x':function(d){
+		// 				return xScale(d[0]);
+		// 			},
+		// 			'y':function(d){
+		// 				return yScale(d[1]);
+		// 			},
+		// 			'font-family':'sams-serif',
+		// 			'fill':'steelblue',
+		// 			'font-size':'11px'
+		// 		});
+	// make the x, y axis
+//Define X axis
+	var xAxis = d3.svg.axis()
+					  .scale(xScale)
+					  .orient("bottom")
+					  .ticks(15);
 
+	//Define Y axis
+	var yAxis = d3.svg.axis()
+					  .scale(yScale)
+					  .orient("left")
+					  .ticks(15);
+
+	svg.append("g")
+	.attr("class", "axis")
+	.attr("transform", "translate(0," + (h - padding) + ")")
+	.call(xAxis);
+	
+	//Create Y axis
+	svg.append("g")
+		.attr("class", "axis")
+		.attr("transform", "translate(" + padding + ",0)")
+		.call(yAxis);
+var formatAsPercentage = d3.format('0.1%');
+xAxis.tickFormat(formatAsPercentage);
+		d3.select('p')
+			.on('click',function(){
+				var l = dataset.length;
+				var maxRange = Math.random()*1000;
+			
+				dataset=[];
+				for(var i=0;i<l;i++){
+					var new1 = Math.floor(Math.random()*maxRange);
+					var new2 = Math.floor(Math.random()*maxRange);
+					dataset.push([new1,new2]);
+				}
+				//Update scale domains
+				xScale.domain([0,d3.max(dataset,function(d){ return d[0];})]);
+				yScale.domain([0,d3.max(dataset,function(d){return d[1];})]);
+				// update all the circiles
+				svg.selectAll('circle')
+						.data(dataset)
+						.transition()
+						.duration(1000)
+						.attr('cx',function(d){
+							return xScale(d[0]);
+						})
+						.attr('cy',function(d){
+							return yScale(d[1]);
+						});
+
+			});
 	</script>
 
 </body>
