@@ -8,6 +8,7 @@
 </head>
 <body>
 <p>Click on this text to update the chart with new data values</p>
+<h4>Click on this text to remove a data value from the chart</h4>
 <script type="text/javascript">
 var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
                 11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
@@ -58,7 +59,7 @@ svg.selectAll('text')
       'y':function(d){
         return h - yScale(d) +14;
       },
-      'fill':'white',
+      'fill':'yellow',
       'font-family':'sans-serif',
       'font-size':'11px',
       'text-anchor':'middle'
@@ -125,7 +126,7 @@ svg.selectAll('text')
       'y':function(d){
         return h - yScale(d) +14;
       },
-      'fill':'white',
+      'fill':'yellow',
       'font-family':'sans-serif',
       'font-size':'11px',
       'text-anchor':'middle'
@@ -142,7 +143,56 @@ svg.selectAll('text')
       .attr('y',function(d){
         return h - yScale(d) +14;
       });
+
   });
+  d3.select('h4')
+        .on('click',function(){
+          dataset.shift()
+          //Exiting elements are those that are on their way out. 
+          // we grab the exit selection, transition the exiting element off to the right side, and remove it
+          var bars = svg.selectAll('rect').data(dataset)
+          var nums=svg.selectAll('text').data(dataset)
+          yScale.domain([0,d3.max(dataset)]);
+          xScale.domain(d3.range(dataset.length))
+          bars.exit()
+              .transition()
+              .duration(500)
+              .attr('x',w)
+              .remove();
+          //update
+          bars.transition()
+              .duration(500)
+              .attr('x',function(d,i){
+                return xScale(i);
+              })
+              .attr('y',function(d){
+                return h-yScale(d);
+              })
+              .attr('width',xScale.rangeBand())
+              .attr('height',function(d){
+                return yScale(d)
+              });
+          nums.exit()
+              .transition()
+              .duration(500)
+              .attr('x',function(d,i){
+                return xScale(i)+xScale.rangeBand()/2
+              })
+              .remove()
+          // updateing
+          nums.transition()
+              .duration(500)
+              .text(function(d){
+                return d;
+              })
+              .attr('x',function(d,i){
+                return xScale(i)+xScale.rangeBand()/2;
+              })
+              .attr('y',function(d){
+                return h - yScale(d) +14;
+              });
+
+        });
 </script>
 </body>
 </html>
