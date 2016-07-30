@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>D3: A starting point for interactivity</title>
+		<script type="text/javascript" src="d3/d3.min.js"></script>
+		<style type="text/css">
+			/*since mouserover,mouserout will overlap the click-sort() function, using pure css to sovle*/
+			rect:hover{
+				fill:orange;
+			}
+		</style>
+	</head>
+	<body>
+		<script type="text/javascript">
+
+			//Width and height
+			var w = 600;
+			var h = 250;
+
+			var dataset = [ 5, 10, 13, 19, 21, 25, 22, 18, 15, 13,
+							11, 12, 15, 20, 18, 17, 16, 18, 23, 25 ];
+
+			var xScale = d3.scale.ordinal()
+							.domain(d3.range(dataset.length))
+							.rangeRoundBands([0, w], 0.05);
+
+			var yScale = d3.scale.linear()
+							.domain([0, d3.max(dataset)])
+							.range([0, h]);
+			// sortBars click to sort(), click again to descending order
+			var sortOrder = false
+			// sort() needs to know how to decide which elements come first
+			// it is passed two values, a and b, which represent the data values of two different elements.
+			var sortBars = function(){
+				sortOrder = !sortOrder
+				svg.selectAll('rect')
+				.sort(function (a,b) {
+					if (sortOrder) {
+						//  use d3.ascending(), into which both a and b are passed. Whichever one is bigger comes out the winner.
+						// And sort() loops through all the data values in this way until it has all the elements, er, sorted out.
+						return d3.ascending(a,b);
+
+					}else{
+						return d3.descending(a,b);
+					}
+				})
+				.transition()
+				// pre-element delay
+				.delay(function (d,i) {
+					return i*50
+				})
+				.duration(1000)
+				.attr('x',function (d,i) {
+					return xScale(i);
+				});
+			};
+			//Create SVG element
+			var svg = d3.select("body")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			//Create bars
+			svg.selectAll("rect")
+			   .data(dataset)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+			   		return xScale(i);
+			   })
+			   .attr("y", function(d) {
+			   		return h - yScale(d);
+			   })
+			   .attr("width", xScale.rangeBand())
+			   .attr("height", function(d) {
+			   		return yScale(d);
+			   })
+			   .attr("fill", function(d) {
+					return "rgb(0, 0, " + (d * 10) + ")";
+			   })
+         .on('click',function(d){
+          	sortBars();
+         })
+				 .append('title')
+				 .text(function (d) {
+					 return 'this value is'+d;
+				 });
+
+
+
+
+		</script>
+	</body>
+</html>
