@@ -1,3 +1,7 @@
+<!-- g group elements do not, by themselves, trigger any mouse events. because g elements have no pixels.
+Only their enclosed elements-like rects,circles, and text elements-have pixels
+Can still bind event listeners to g elements. Keep in mind that the elements within that g will then behave as a group
+ -->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -5,16 +9,7 @@
 		<title>D3: A starting point for interactivity</title>
 		<script type="text/javascript" src="d3/d3.min.js"></script>
 		<style type="text/css">
-			/* No style rules here yet */
-      rect {
-        -moz-transition: all 0.3s;
-        -o-transition: all 0.3s;
-        -webkit-transition: all 0.3s;
-        transition: all 0.3s;
-}
-      /*rect:hover{
-        fill:orange;
-      }*/
+
 		</style>
 	</head>
 	<body>
@@ -34,7 +29,23 @@
 			var yScale = d3.scale.linear()
 							.domain([0, d3.max(dataset)])
 							.range([0, h]);
-
+			// sortBars
+			// sort() needs to know how to decide which elements come first
+			// it is passed two values, a and b, which represent the data values of two different elements.
+			var sortBars = function(){
+				svg.selectAll('rect')
+				.sort(function (a,b) {
+					console.log(a,b)
+					//  use d3.ascending(), into which both a and b are passed. Whichever one is bigger comes out the winner.
+					// And sort() loops through all the data values in this way until it has all the elements, er, sorted out.
+					return d3.ascending(a,b)
+				})
+				.transition()
+				.duration(1000)
+				.attr('x',function (d,i) {
+					return xScale(i);
+				});
+			};
 			//Create SVG element
 			var svg = d3.select("body")
 						.append("svg")
@@ -60,7 +71,7 @@
 					return "rgb(0, 0, " + (d * 10) + ")";
 			   })
          .on('click',function(d){
-           console.log(d);
+          	sortBars();
          })
         //  to repalce css rect:hover
          .on('mouseover',function() {
@@ -74,6 +85,8 @@
               .duration(500)
               .attr('fill','rgb(0,0,'+(d*10)+')')
          });
+
+
 
 			//Create labels
 			svg.selectAll("text")
@@ -92,7 +105,9 @@
 			   })
 			   .attr("font-family", "sans-serif")
 			   .attr("font-size", "11px")
-			   .attr("fill", "white");
+			   .attr("fill", "white")
+        //  means this element shouldn't trigger any pointer events(such as click,mouseover..)
+         .style('pointer-events','none');
 
 		</script>
 	</body>
