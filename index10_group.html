@@ -9,7 +9,10 @@ Can still bind event listeners to g elements. Keep in mind that the elements wit
 		<title>D3: A starting point for interactivity</title>
 		<script type="text/javascript" src="d3/d3.min.js"></script>
 		<style type="text/css">
-
+			/*since mouserover,mouserout will overlap the click-sort() function, using pure css to sovle*/
+			rect:hover{
+				fill:orange;
+			}
 		</style>
 	</head>
 	<body>
@@ -29,18 +32,28 @@ Can still bind event listeners to g elements. Keep in mind that the elements wit
 			var yScale = d3.scale.linear()
 							.domain([0, d3.max(dataset)])
 							.range([0, h]);
-			// sortBars
+			// sortBars click to sort(), click again to descending order
+			var sortOrder = false
 			// sort() needs to know how to decide which elements come first
 			// it is passed two values, a and b, which represent the data values of two different elements.
 			var sortBars = function(){
+				sortOrder = !sortOrder
 				svg.selectAll('rect')
 				.sort(function (a,b) {
-					console.log(a,b)
-					//  use d3.ascending(), into which both a and b are passed. Whichever one is bigger comes out the winner.
-					// And sort() loops through all the data values in this way until it has all the elements, er, sorted out.
-					return d3.ascending(a,b)
+					if (sortOrder) {
+						//  use d3.ascending(), into which both a and b are passed. Whichever one is bigger comes out the winner.
+						// And sort() loops through all the data values in this way until it has all the elements, er, sorted out.
+						return d3.ascending(a,b);
+
+					}else{
+						return d3.descending(a,b);
+					}
 				})
 				.transition()
+				// pre-element delay
+				.delay(function (d,i) {
+					return i*50
+				})
 				.duration(1000)
 				.attr('x',function (d,i) {
 					return xScale(i);
@@ -72,18 +85,6 @@ Can still bind event listeners to g elements. Keep in mind that the elements wit
 			   })
          .on('click',function(d){
           	sortBars();
-         })
-        //  to repalce css rect:hover
-         .on('mouseover',function() {
-            d3.select(this)
-              .attr('fill','orange')
-         })
-         .on('mouseout',function (d) {
-            d3.select(this)
-            // to make change more smooth
-              .transition()
-              .duration(500)
-              .attr('fill','rgb(0,0,'+(d*10)+')')
          });
 
 
