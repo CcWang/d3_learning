@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chapter 11 force layout</title>
+		<script type="text/javascript" src="d3/d3.min.js"></script>
+		<style type="text/css">
+
+		</style>
+  </head>
+  <body>
+    	<script type="text/javascript">
+      // width and height
+        var w=500;
+        var h=300;
+      // dataset
+      // source link to target
+      var dataset={
+        nodes:[
+              {name:'Adam'},
+              {name:'Bob'},
+              {name:'Carrie'},
+              {name:'Donovan'},
+              {name:'Edward'},
+              {name:'Felicity'},
+              {name:'George'},
+              {name:'Hannah'},
+              {name:'Iris'},
+              {name:'Jerry'}
+        ],
+        edges:[
+            { source: 0, target: 1 },
+            { source: 0, target: 2 },
+            { source: 0, target: 3 },
+            { source: 0, target: 4 },
+            { source: 1, target: 5 },
+            { source: 2, target: 5 },
+            { source: 2, target: 5 },
+            { source: 3, target: 4 },
+            { source: 5, target: 8 },
+            { source: 5, target: 9 },
+            { source: 6, target: 7 },
+            { source: 7, target: 8 },
+            { source: 8, target: 9 }
+
+        ]
+      };
+      </script>
+
+  </body>
+</html>
